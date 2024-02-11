@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+. n_env/bin/activate
+npm run dev
+deactivate

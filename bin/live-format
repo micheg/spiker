@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+. ./n_env/bin/activate
+
+cd src
+
+npx onchange "**/*" -- npx prettier --write -u --no-error-on-unmatched-pattern --require-pragma {{changed}}
+
+
+deactivate
