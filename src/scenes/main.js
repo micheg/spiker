@@ -2,7 +2,8 @@
  * @format
  */
 
-const VELOCITY = 300;
+const SPIKE_VELOCITY = 250;
+const PLAER_VELOCITY = 300;
 
 import "phaser";
 
@@ -13,7 +14,7 @@ export default class MainScene extends Phaser.Scene {
   init() {
     this.totalTime = 0;
     this.food = false;
-    this.JUMP = VELOCITY;
+    this.JUMP = PLAER_VELOCITY;
     this.score = 0;
   }
 
@@ -24,18 +25,18 @@ export default class MainScene extends Phaser.Scene {
     this.height = height;
     this.add.image(width / 2, height / 2, "texture", "sky.png");
 
-    const bird = this.physics.add
+    const player = this.physics.add
       .image(width * 0.1, height / 2, "texture", "bird.png")
       .setOrigin(0.5);
-    bird.flipX = true;
-    bird.body.velocity.x = VELOCITY;
-    bird.body.gravity.y = VELOCITY + 100;
-    this.bird = bird;
+    player.flipX = true;
+    player.body.velocity.x = PLAER_VELOCITY;
+    player.body.gravity.y = PLAER_VELOCITY + 100;
+    this.player = player;
     const spike_up = this.physics.add
       .image(width / 2, height - 50, "texture", "spike.png")
       .setOrigin(0.5, 0)
       .setImmovable(true);
-    spike_up.body.velocity.y = -VELOCITY / 5;
+    spike_up.body.velocity.y = -SPIKE_VELOCITY / 5;
     this.spike_up = spike_up;
 
     const spike_dwn = this.physics.add
@@ -43,18 +44,18 @@ export default class MainScene extends Phaser.Scene {
       .setOrigin(0.5, 1)
       .setImmovable(true);
     spike_dwn.flipY = true;
-    spike_dwn.body.velocity.y = VELOCITY / 5;
+    spike_dwn.body.velocity.y = SPIKE_VELOCITY / 5;
     this.spike_dwn = spike_dwn;
 
     this.input.on("pointerdown", (evt) => {
-      bird.body.velocity.y = -this.JUMP;
+      player.body.velocity.y = -this.JUMP;
     });
     this.input.keyboard.on("keydown-SPACE", (evt) => {
-      bird.body.velocity.y = -this.JUMP;
+      player.body.velocity.y = -this.JUMP;
     });
 
-    this.physics.add.collider(bird, spike_up, this.restart, null, this);
-    this.physics.add.collider(bird, spike_dwn, this.restart, null, this);
+    this.physics.add.collider(player, spike_up, this.restart, null, this);
+    this.physics.add.collider(player, spike_dwn, this.restart, null, this);
 
     this.scoreTxt = this.add
       .text(width / 2, 50, "Score: 0", {
@@ -70,7 +71,9 @@ export default class MainScene extends Phaser.Scene {
       scale: { start: 1, end: 0 },
       blendMode: "ADD",
     });
-    emitter.startFollow(bird);
+    emitter.startFollow(player);
+    this.emitter = emitter;
+    window.$E = emitter;
   }
 
   restart() {
@@ -87,7 +90,7 @@ export default class MainScene extends Phaser.Scene {
     const { width, height } = this.sys.game.canvas;
     const center = height / 2;
     let x =
-      this.bird.x > width / 2
+      this.player.x > width / 2
         ? Phaser.Math.Between(50, width / 2)
         : Phaser.Math.Between(width / 2, 530);
 
@@ -102,7 +105,7 @@ export default class MainScene extends Phaser.Scene {
     star.setScale(2);
     //star.body.update();
     this.physics.add.overlap(
-      this.bird,
+      this.player,
       star,
       function () {
         this.food = false;
@@ -147,17 +150,25 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    if (this.bird.body.velocity.x > 0) this.bird.flipX = true;
+    if (this.player.body.velocity.x > 0) {
+      this.player.flipX = true;
+      this.emitter.followOffset.x = -35;
+      this.emitter.followOffset.y = -15;
+    } else {
+      this.player.flipX = false;
+      this.emitter.followOffset.x = 35;
+      this.emitter.followOffset.y = -15;
+    }
     this.totalTime += delta;
     if (this.totalTime > 600) {
       this.totalTime = 0;
       this.createFood();
     }
-    const { bird, width, height } = this;
-    if (bird.x > width - bird.width) {
-      bird.body.velocity.x = -VELOCITY;
-    } else if (bird.x < bird.width) {
-      bird.body.velocity.x = VELOCITY;
+    const { player, width, height } = this;
+    if (player.x > width - player.width) {
+      player.body.velocity.x = -PLAER_VELOCITY;
+    } else if (player.x < player.width) {
+      player.body.velocity.x = PLAER_VELOCITY;
     }
   }
 }
