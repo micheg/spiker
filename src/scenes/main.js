@@ -17,37 +17,29 @@ export default class MainScene extends Phaser.Scene {
     this.score = 0;
   }
 
-  preload() {
-    this.load.image("sky", "assets/sky.png");
-    this.load.image("bird", "assets/bird.png");
-    this.load.image("spike2", "assets/spike2.png");
-    this.load.image("star", "assets/star.png");
-    this.load.image("red", "assets/red.png");
-  }
-
   create() {
     const { width, height } = this.sys.game.canvas;
 
     this.width = width;
     this.height = height;
-    this.add.image(width / 2, height / 2, "sky");
+    this.add.image(width / 2, height / 2, "texture", "sky.png");
+
     const bird = this.physics.add
-      .image(width * 0.1, height / 2, "bird")
+      .image(width * 0.1, height / 2, "texture", "bird.png")
       .setOrigin(0.5);
     bird.flipX = true;
     bird.body.velocity.x = VELOCITY;
     bird.body.gravity.y = VELOCITY + 100;
     this.bird = bird;
-
     const spike_up = this.physics.add
-      .image(width / 2, height - 50, "spike2")
+      .image(width / 2, height - 50, "texture", "spike.png")
       .setOrigin(0.5, 0)
       .setImmovable(true);
     spike_up.body.velocity.y = -VELOCITY / 5;
     this.spike_up = spike_up;
 
     const spike_dwn = this.physics.add
-      .image(width / 2, 50, "spike2")
+      .image(width / 2, 50, "texture", "spike.png")
       .setOrigin(0.5, 1)
       .setImmovable(true);
     spike_dwn.flipY = true;
@@ -72,7 +64,8 @@ export default class MainScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    const emitter = this.add.particles(0, 30, "red", {
+    const emitter = this.add.particles(0, 30, "texture", {
+      frame: "red.png",
       speed: 100,
       scale: { start: 1, end: 0 },
       blendMode: "ADD",
@@ -101,7 +94,9 @@ export default class MainScene extends Phaser.Scene {
     //const x = Phaser.Math.Between(50, 530);
     const delta = (this.spike_up.y - this.spike_dwn.y - 50) / 2;
     const y = Phaser.Math.Between(center - delta, center + delta);
-    const star = this.physics.add.image(x, y, "star").setImmovable(true);
+    const star = this.physics.add
+      .image(x, y, "texture", "r_star.png")
+      .setImmovable(true);
     star.setScale(2);
     //star.body.update();
     this.physics.add.overlap(
