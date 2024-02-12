@@ -91,11 +91,13 @@ export default class MainScene extends Phaser.Scene {
         ? Phaser.Math.Between(50, width / 2)
         : Phaser.Math.Between(width / 2, 530);
 
-    //const x = Phaser.Math.Between(50, 530);
+    const fortune = Phaser.Math.Between(1, 10);
+    this.food_texture = fortune > 6 ? "r_star.png" : "b_star.png";
+
     const delta = (this.spike_up.y - this.spike_dwn.y - 50) / 2;
     const y = Phaser.Math.Between(center - delta, center + delta);
     const star = this.physics.add
-      .image(x, y, "texture", "r_star.png")
+      .image(x, y, "texture", this.food_texture)
       .setImmovable(true);
     star.setScale(2);
     //star.body.update();
@@ -108,8 +110,10 @@ export default class MainScene extends Phaser.Scene {
         this.score += 5;
         star.destroy();
         this.updateScore();
-        const max_up = Math.min(this.spike_up.y + 100, height - 50);
-        const max_dw = Math.max(this.spike_dwn.y - 100, 50);
+        const _jump = this.food_texture === "r_star.png" ? 100 : 30;
+
+        const max_up = Math.min(this.spike_up.y + _jump, height - 50);
+        const max_dw = Math.max(this.spike_dwn.y - _jump, 50);
         this.spike_up.setPosition(width / 2, max_up);
         this.spike_dwn.setPosition(width / 2, max_dw);
       },
