@@ -1,24 +1,8 @@
-import { Scene } from "phaser";
+import BaseUIScene from "./base_ui";
 
-class TutScene extends Scene {
+class TutScene extends BaseUIScene {
   constructor() {
     super("tutorial");
-  }
-
-  create_spike() {
-    const { width, height } = this.sys.game.canvas;
-    const spike_up = this.add
-      .image(width / 2, height - 50, "texture", "spike.png")
-      .setOrigin(0.5, 0);
-
-    const spike_dwn = this.add
-      .image(width / 2, 150, "texture", "spike.png")
-      .setOrigin(0.5, 1);
-    spike_dwn.flipY = true;
-    return {
-      top: spike_dwn,
-      bottom: spike_up,
-    };
   }
 
   create() {
@@ -60,25 +44,7 @@ class TutScene extends Scene {
     });
 
     this.spikes = this.create_spike();
-
-    const logo = this.add
-      .text(center.x, 60, "SPIKER", {
-        fontFamily: "monospace",
-        fontSize: 70,
-        color: "#FFFFFF",
-      })
-      .setOrigin(0.5)
-      .setAlpha(0.2);
-
-    this.tweens.add({
-      targets: logo,
-      alpha: 1,
-      scale: 1.2,
-      duration: 800,
-      yoyo: true,
-      repeat: -1,
-      ease: "Cubic",
-    });
+    this.create_logo();
 
     this.input.on("pointerdown", () => {
       this.tweens.add({
