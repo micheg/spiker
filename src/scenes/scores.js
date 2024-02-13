@@ -9,25 +9,12 @@ function pad(str) {
   return ":: " + tmp + str + tmp + " ::";
 }
 
-class MenuScene extends Scene {
+let padTo8 = (number) =>
+  number <= 99999999 ? `0000000${number}`.slice(-8) : "OVERKILL";
+
+class ScoreScene extends Scene {
   constructor() {
-    super("menu");
-  }
-
-  create_spike() {
-    const { width, height } = this.sys.game.canvas;
-    const spike_up = this.add
-      .image(width / 2, height - 50, "texture", "spike.png")
-      .setOrigin(0.5, 0);
-
-    const spike_dwn = this.add
-      .image(width / 2, 150, "texture", "spike.png")
-      .setOrigin(0.5, 1);
-    spike_dwn.flipY = true;
-    return {
-      top: spike_dwn,
-      bottom: spike_up,
-    };
+    super("score");
   }
 
   create_btn(text, y, callback) {
@@ -61,6 +48,22 @@ class MenuScene extends Scene {
     return button;
   }
 
+  create_spike() {
+    const { width, height } = this.sys.game.canvas;
+    const spike_up = this.add
+      .image(width / 2, height - 50, "texture", "spike.png")
+      .setOrigin(0.5, 0);
+
+    const spike_dwn = this.add
+      .image(width / 2, 150, "texture", "spike.png")
+      .setOrigin(0.5, 1);
+    spike_dwn.flipY = true;
+    return {
+      top: spike_dwn,
+      bottom: spike_up,
+    };
+  }
+
   create() {
     const { width, height } = this.sys.game.canvas;
     this.center = {
@@ -73,26 +76,26 @@ class MenuScene extends Scene {
       .rectangle(center.x, center.y, width, height, 0x454c60)
       .setOrigin(0.5);
 
-    this.create_btn("Start Game!", center.y - 200, () => {
+    this.create_btn("back", height - 80, () => {
       this.scene.stop();
-      this.scene.run("game");
+      this.scene.run("menu");
     });
 
-    this.create_btn("Scores!", center.y, () => {
-      this.scene.stop();
-      this.scene.run("score");
-    });
-    const audio_label = this.game.config.info.audio ? "Audio  ON" : "Audio OFF";
+    const tmp = JSON.parse(sessionStorage.scores || JSON.stringify([]));
 
-    this.audio_btn = this.create_btn(audio_label, center.y + 200, () => {
-      this.game.config.info.audio = !this.game.config.info.audio;
-      const audio_label = this.game.config.info.audio
-        ? "Audio  ON"
-        : "Audio OFF";
-      this.audio_btn.text = pad(audio_label);
-    });
+    for (let i = 0; i < tmp.length; i++) {
+      const y = 150 + (i + 1) * 70;
+      this.add
+        .text(center.x, y, tmp[i], {
+          fontFamily: "monospace",
+          fontSize: 50,
+          color: "#FFFFFF",
+        })
+        .setOrigin(0.5);
+    }
 
     this.spikes = this.create_spike();
+
     this.add
       .text(center.x, 70, "SPIKER", {
         fontFamily: "monospace",
@@ -103,4 +106,4 @@ class MenuScene extends Scene {
   }
 }
 
-export default MenuScene;
+export default ScoreScene;

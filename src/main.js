@@ -3,9 +3,10 @@
  */
 
 import "phaser";
-import GameScene from "./scenes/main";
+import GameScene from "./scenes/game";
 import BootScene from "./scenes/boot";
 import MenuScene from "./scenes/menu";
+import ScoreScene from "./scenes/scores";
 
 const game_area = {
   h: 1031,
@@ -22,7 +23,7 @@ let config = {
     height: 1031,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, MenuScene, GameScene],
+  scene: [BootScene, MenuScene, GameScene, ScoreScene],
   physics: {
     default: "arcade",
     arcade: {

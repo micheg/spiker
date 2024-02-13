@@ -105,11 +105,18 @@ export default class GameScene extends Phaser.Scene {
       ease: "Cubic",
       yoyo: true,
       onComplete: () => {
-        //this.scene.restart();
+        this.saveScore();
         this.scene.stop();
         this.scene.run("menu");
       },
     });
+  }
+
+  saveScore() {
+    let tmp = JSON.parse(sessionStorage.scores || JSON.stringify([]));
+    tmp.push(this.score);
+    tmp.sort((a, b) => b - a).slice(0, 10);
+    sessionStorage.scores = JSON.stringify(tmp);
   }
 
   updateScore() {
