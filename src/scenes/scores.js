@@ -84,11 +84,11 @@ class ScoreScene extends Scene {
     const tmp = JSON.parse(sessionStorage.scores || JSON.stringify([]));
 
     for (let i = 0; i < tmp.length; i++) {
-      const y = 150 + (i + 1) * 70;
+      const y = 150 + (i + 1) * 50;
       this.add
-        .text(center.x, y, tmp[i], {
+        .text(center.x, y, pad(padTo8(tmp[i])), {
           fontFamily: "monospace",
-          fontSize: 50,
+          fontSize: 36,
           color: "#FFFFFF",
         })
         .setOrigin(0.5);
@@ -96,13 +96,23 @@ class ScoreScene extends Scene {
 
     this.spikes = this.create_spike();
 
-    this.add
-      .text(center.x, 70, "SPIKER", {
+    const logo = this.add
+      .text(center.x, 60, "SPIKER", {
         fontFamily: "monospace",
         fontSize: 70,
         color: "#FFFFFF",
       })
       .setOrigin(0.5);
+
+    this.tweens.add({
+      targets: logo,
+      alpha: 1,
+      scale: 1.2,
+      duration: 800,
+      yoyo: true,
+      repeat: -1,
+      ease: "Cubic",
+    });
   }
 }
 

@@ -7,6 +7,7 @@ import GameScene from "./scenes/game";
 import BootScene from "./scenes/boot";
 import MenuScene from "./scenes/menu";
 import ScoreScene from "./scenes/scores";
+import TutScene from "./scenes/tutorial";
 
 const game_area = {
   h: 1031,
@@ -23,7 +24,7 @@ let config = {
     height: 1031,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, MenuScene, GameScene, ScoreScene],
+  scene: [BootScene, MenuScene, GameScene, ScoreScene, TutScene],
   physics: {
     default: "arcade",
     arcade: {

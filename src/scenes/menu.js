@@ -68,14 +68,18 @@ class MenuScene extends Scene {
       y: height / 2,
     };
     const center = this.center;
-    //this.add.image(center.x, center.y, "texture", "sky.png");
     const rect = this.add
       .rectangle(center.x, center.y, width, height, 0x454c60)
       .setOrigin(0.5);
 
     this.create_btn("Start Game!", center.y - 200, () => {
       this.scene.stop();
-      this.scene.run("game");
+      if (sessionStorage.getItem("tutorial") === null) {
+        this.scene.run("tutorial");
+        sessionStorage.setItem("tutorial", true);
+      } else {
+        this.scene.run("game");
+      }
     });
 
     this.create_btn("Scores!", center.y, () => {
@@ -101,6 +105,7 @@ class MenuScene extends Scene {
       })
       .setOrigin(0.5)
       .setAlpha(0.2);
+
     this.tweens.add({
       targets: logo,
       alpha: 1,
