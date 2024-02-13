@@ -16,6 +16,8 @@ export default class MainScene extends Phaser.Scene {
     this.food = false;
     this.JUMP = PLAER_VELOCITY;
     this.score = 0;
+    this.state = "PLAY";
+    this.dead_from = null;
   }
 
   create() {
@@ -54,8 +56,8 @@ export default class MainScene extends Phaser.Scene {
       player.body.velocity.y = -this.JUMP;
     });
 
-    this.physics.add.collider(player, spike_up, this.restart, null, this);
-    this.physics.add.collider(player, spike_dwn, this.restart, null, this);
+    this.physics.add.collider(player, spike_up, this.restart_up, null, this);
+    this.physics.add.collider(player, spike_dwn, this.restart_down, null, this);
 
     this.scoreTxt = this.add
       .text(width / 2, 50, "Score: 0", {
@@ -73,11 +75,39 @@ export default class MainScene extends Phaser.Scene {
     });
     emitter.startFollow(player);
     this.emitter = emitter;
-    window.$E = emitter;
   }
-
+  stop_game_objs() {
+    this.emitter.stop();
+    this.spike_dwn.body.velocity.y = 0;
+    this.spike_up.body.velocity.y = 0;
+    this.player.body.velocity.y = 0;
+    this.player.body.velocity.x = 0;
+  }
+  restart_up() {
+    this.dead_from = "UP";
+    this.restart();
+  }
+  restart_down() {
+    this.dead_from = "DOWN";
+    this.restart();
+  }
   restart() {
-    this.scene.restart();
+    const { width, height } = this.sys.game.canvas;
+    this.state = "END";
+    this.stop_game_objs();
+    const target_h = this.dead_from === "UP" ? -20 : height + 20;
+    this.tweens.add({
+      targets: this.player,
+      scale: 3,
+      y: target_h,
+      rotation: 360,
+      duration: 1000,
+      ease: "Cubic",
+      yoyo: true,
+      onComplete: () => {
+        this.scene.restart();
+      },
+    });
   }
 
   updateScore() {
@@ -89,13 +119,14 @@ export default class MainScene extends Phaser.Scene {
     this.food = true;
     const { width, height } = this.sys.game.canvas;
     const center = height / 2;
+    const x_delta = 70;
     let x =
       this.player.x > width / 2
-        ? Phaser.Math.Between(50, width / 2)
-        : Phaser.Math.Between(width / 2, 530);
+        ? Phaser.Math.Between(x_delta, width / 2)
+        : Phaser.Math.Between(width / 2, width - x_delta);
 
     const fortune = Phaser.Math.Between(1, 10);
-    this.food_texture = fortune > 6 ? "r_star.png" : "b_star.png";
+    this.food_texture = fortune > 7 ? "r_star.png" : "b_star.png";
 
     const delta = (this.spike_up.y - this.spike_dwn.y - 50) / 2;
     const y = Phaser.Math.Between(center - delta, center + delta);
@@ -108,12 +139,12 @@ export default class MainScene extends Phaser.Scene {
       this.player,
       star,
       function () {
-        this.food = false;
         this.JUMP += 5;
         this.score += 5;
+        this.food = false;
         star.destroy();
         this.updateScore();
-        const _jump = this.food_texture === "r_star.png" ? 100 : 30;
+        const _jump = this.food_texture === "r_star.png" ? 100 : 50;
 
         const max_up = Math.min(this.spike_up.y + _jump, height - 50);
         const max_dw = Math.max(this.spike_dwn.y - _jump, 50);
@@ -150,6 +181,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update(time, delta) {
+    if (this.state !== "PLAY") return;
     if (this.player.body.velocity.x > 0) {
       this.player.flipX = true;
       this.emitter.followOffset.x = -35;
