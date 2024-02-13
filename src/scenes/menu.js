@@ -93,13 +93,23 @@ class MenuScene extends Scene {
     });
 
     this.spikes = this.create_spike();
-    this.add
-      .text(center.x, 70, "SPIKER", {
+    const logo = this.add
+      .text(center.x, 60, "SPIKER", {
         fontFamily: "monospace",
         fontSize: 70,
         color: "#FFFFFF",
       })
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setAlpha(0.2);
+    this.tweens.add({
+      targets: logo,
+      alpha: 1,
+      scale: 1.2,
+      duration: 800,
+      yoyo: true,
+      repeat: -1,
+      ease: "Cubic",
+    });
   }
 }
 
