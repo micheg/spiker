@@ -7,9 +7,9 @@ const PLAER_VELOCITY = 300;
 
 import "phaser";
 
-export default class MainScene extends Phaser.Scene {
+export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("main");
+    super("game");
   }
   init() {
     this.totalTime = 0;
@@ -101,11 +101,13 @@ export default class MainScene extends Phaser.Scene {
       scale: 3,
       y: target_h,
       rotation: 360,
-      duration: 1000,
+      duration: 600,
       ease: "Cubic",
       yoyo: true,
       onComplete: () => {
-        this.scene.restart();
+        //this.scene.restart();
+        this.scene.stop();
+        this.scene.run("menu");
       },
     });
   }

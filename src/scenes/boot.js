@@ -41,7 +41,8 @@ class BootScene extends Scene {
   }
 
   _next() {
-    this.scene.start("main");
+    this.scene.stop();
+    this.scene.start("menu");
   }
 }
 
