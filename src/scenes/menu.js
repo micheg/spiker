@@ -1,11 +1,22 @@
 import BaseUIScene from "./base_ui";
+import { can_play } from "../helpers/utils";
 
 class MenuScene extends BaseUIScene {
   constructor() {
     super("menu");
   }
 
+  play_bg() {
+    if (this.bg_sound.isPlaying) return;
+    if (can_play(this) === false) return;
+    this.bg_sound.play();
+  }
+
   create() {
+    this.sound.removeByKey("back");
+    this.bg_sound = this.sound.add("back", { volume: 0.3, loop: true });
+    this.play_bg();
+
     const { width, height } = this.sys.game.canvas;
     this.center = {
       x: width / 2,
@@ -38,6 +49,7 @@ class MenuScene extends BaseUIScene {
         ? "Audio  ON"
         : "Audio OFF";
       this.audio_btn.text = this._pad(audio_label);
+      this.play_bg();
     });
 
     this.spikes = this.create_spike();

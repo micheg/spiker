@@ -26,6 +26,10 @@ class BootScene extends Scene {
     this.add.rectangle(center_x, center_y, width - 20, 60, 0x000000);
 
     this.progressbar = this.add.rectangle(20, center_y, 0, 40, 0xffffff);
+    this.load.audio("back", ["assets/back.ogg", "assets/back.mp3"]);
+    this.load.audio("hit", ["assets/hit.wav"]);
+    this.load.audio("jump", ["assets/jump.wav"]);
+    this.load.audio("pick", ["assets/pick.wav"]);
 
     this.load.atlas("texture", "assets/texture.png", "assets/texture.json");
     this.load.on("progress", this.progress, this);

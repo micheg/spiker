@@ -1,6 +1,4 @@
-/**
- * @format
- */
+import { can_play } from "../helpers/utils";
 
 const SPIKE_VELOCITY = 250;
 const PLAER_VELOCITY = 300;
@@ -20,7 +18,18 @@ export default class GameScene extends Phaser.Scene {
     this.dead_from = null;
   }
 
+  play(sound) {
+    if (can_play(this)) this[sound].play();
+  }
+
+  create_audio() {
+    this.hit = this.sound.add("hit");
+    this.pick = this.sound.add("pick");
+    this.jump = this.sound.add("jump");
+  }
+
   create() {
+    this.create_audio();
     const { width, height } = this.sys.game.canvas;
 
     this.width = width;
@@ -51,9 +60,11 @@ export default class GameScene extends Phaser.Scene {
 
     this.input.on("pointerdown", (evt) => {
       player.body.velocity.y = -this.JUMP;
+      this.play("jump");
     });
     this.input.keyboard.on("keydown-SPACE", (evt) => {
       player.body.velocity.y = -this.JUMP;
+      this.play("jump");
     });
 
     this.physics.add.collider(player, spike_up, this.restart_up, null, this);
@@ -92,6 +103,7 @@ export default class GameScene extends Phaser.Scene {
     this.restart();
   }
   restart() {
+    this.play("hit");
     const { width, height } = this.sys.game.canvas;
     this.state = "END";
     this.stop_game_objs();
@@ -151,6 +163,7 @@ export default class GameScene extends Phaser.Scene {
         this.JUMP += 5;
         this.score += 5;
         this.food = false;
+        this.play("pick");
         star.destroy();
         this.updateScore();
         const _jump = this.food_texture === "r_star.png" ? 100 : 50;
@@ -167,6 +180,7 @@ export default class GameScene extends Phaser.Scene {
       star,
       this.spike_up,
       function () {
+        this.play("hit");
         this.food = false;
         this.score -= 5;
         star.destroy();
@@ -179,6 +193,7 @@ export default class GameScene extends Phaser.Scene {
       star,
       this.spike_dwn,
       function () {
+        this.play("hit");
         this.food = false;
         this.score -= 5;
         star.destroy();
