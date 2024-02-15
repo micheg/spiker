@@ -1,0 +1,6 @@
+{
+  "appId": "com.michelangelog.spiker",
+  "appName": "Spiker",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+. n_env/bin/activate
+npm run build
+npx cap sync
+cd android
+./gradlew assembleDebug
+cd ..
+find . -iname "*.apk" -print
+
+deactivate

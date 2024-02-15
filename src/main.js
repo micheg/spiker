@@ -35,6 +35,12 @@ let config = {
 };
 
 window.addEventListener("load", () => {
+  try {
+    window.screen.orientation.lock("portrait");
+    StatusBar.hide();
+  } catch (error) {
+    console.error(error);
+  }
   if (window.innerWidth < window.innerHeight) {
     const ratio = window.innerHeight / window.innerWidth;
     const width = 580;

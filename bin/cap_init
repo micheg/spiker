@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd ..
+
+. n_env/bin/activate
+
+npm install @capacitor/android
+npx cap add android
+npx capacitor-assets generate
+npm run build
+npx cap sync
