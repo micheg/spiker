@@ -14,11 +14,11 @@ class BaseUIScene extends Scene {
   create_spike() {
     const { width, height } = this.sys.game.canvas;
     const spike_up = this.add
-      .image(width / 2, height - 50, "texture", "spike.png")
+      .image(width / 2, height - 50, "texture", "spike_wall.png")
       .setOrigin(0.5, 0);
 
     const spike_dwn = this.add
-      .image(width / 2, 150, "texture", "spike.png")
+      .image(width / 2, 150, "texture", "spike_wall.png")
       .setOrigin(0.5, 1);
     spike_dwn.flipY = true;
     return {

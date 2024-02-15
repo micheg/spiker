@@ -28,6 +28,30 @@ export default class GameScene extends Phaser.Scene {
     this.jump = this.sound.add("jump");
   }
 
+  create_player() {
+    const { width, height } = this.sys.game.canvas;
+    this.anims.create({
+      key: "fly",
+      frameRate: 8,
+      frames: this.anims.generateFrameNames("texture", {
+        prefix: "ape",
+        suffix: ".png",
+        start: 1,
+        end: 2,
+      }),
+      repeat: -1,
+    });
+
+    const player = this.physics.add
+      .sprite(width * 0.1, height / 2, "texture", "ape1.png")
+      .setOrigin(0.5)
+      .setScale(1.5)
+      .play("fly");
+    player.body.velocity.x = PLAER_VELOCITY;
+    player.body.gravity.y = PLAER_VELOCITY + 100;
+    return player;
+  }
+
   create() {
     this.create_audio();
     const { width, height } = this.sys.game.canvas;
@@ -36,22 +60,18 @@ export default class GameScene extends Phaser.Scene {
     this.height = height;
     this.add.image(width / 2, height / 2, "texture", "sky.png");
 
-    const player = this.physics.add
-      .image(width * 0.1, height / 2, "texture", "bird.png")
-      .setOrigin(0.5);
-    player.flipX = true;
-    player.body.velocity.x = PLAER_VELOCITY;
-    player.body.gravity.y = PLAER_VELOCITY + 100;
+    const player = this.create_player();
     this.player = player;
+
     const spike_up = this.physics.add
-      .image(width / 2, height - 50, "texture", "spike.png")
+      .image(width / 2, height - 50, "texture", "spike_wall.png")
       .setOrigin(0.5, 0)
       .setImmovable(true);
     spike_up.body.velocity.y = -SPIKE_VELOCITY / 5;
     this.spike_up = spike_up;
 
     const spike_dwn = this.physics.add
-      .image(width / 2, 50, "texture", "spike.png")
+      .image(width / 2, 50, "texture", "spike_wall.png")
       .setOrigin(0.5, 1)
       .setImmovable(true);
     spike_dwn.flipY = true;
@@ -207,11 +227,11 @@ export default class GameScene extends Phaser.Scene {
   update(time, delta) {
     if (this.state !== "PLAY") return;
     if (this.player.body.velocity.x > 0) {
-      this.player.flipX = true;
+      this.player.flipX = false;
       this.emitter.followOffset.x = -35;
       this.emitter.followOffset.y = -15;
     } else {
-      this.player.flipX = false;
+      this.player.flipX = true;
       this.emitter.followOffset.x = 35;
       this.emitter.followOffset.y = -15;
     }
