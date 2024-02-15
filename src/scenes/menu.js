@@ -7,9 +7,10 @@ class MenuScene extends BaseUIScene {
   }
 
   play_bg() {
-    if (this.bg_sound.isPlaying) return;
-    if (can_play(this) === false) return;
-    this.bg_sound.play();
+    if (can_play(this) && this.bg_sound.isPlaying) return;
+    if (can_play(this) && !this.bg_sound.isPlaying) this.bg_sound.play();
+    if (!can_play(this) && !this.bg_sound.isPlaying) return;
+    if (!can_play(this) && this.bg_sound.isPlaying) this.bg_sound.stop();
   }
 
   create() {
