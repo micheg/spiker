@@ -6,15 +6,27 @@ export default class PuaseScene extends Phaser.Scene {
   }
 
   create() {
+    const pad_value = 75;
     const { width, height } = this.sys.game.canvas;
     this.r2_pushed === false;
     this.r1_pushed === false;
+
+    const rb = this.add
+      .rectangle(width / 2, height / 2, width, height, 0xffffff, 0.4)
+      .setOrigin(0.5);
     const rect2 = this.add
-      .rectangle(width / 2, height / 2 - 100, width - 20, 80, 0x454c60, 0.7)
+      .rectangle(
+        width / 2,
+        height / 2 - pad_value,
+        width - 20,
+        80,
+        0x454c60,
+        0.7,
+      )
       .setOrigin(0.5);
 
     const button_resume = this.add
-      .text(width / 2, height / 2 - 100, "Resume", {
+      .text(width / 2, height / 2 - pad_value, "Resume", {
         fontFamily: "monospace",
         fontSize: 50,
         color: "#FFFFFF",
@@ -39,11 +51,18 @@ export default class PuaseScene extends Phaser.Scene {
     });
 
     const rect1 = this.add
-      .rectangle(width / 2, height / 2 + 100, width - 20, 80, 0x454c60, 0.7)
+      .rectangle(
+        width / 2,
+        height / 2 + pad_value,
+        width - 20,
+        80,
+        0x454c60,
+        0.7,
+      )
       .setOrigin(0.5);
 
     const button_exit = this.add
-      .text(width / 2, height / 2 + 100, "Exit", {
+      .text(width / 2, height / 2 + pad_value, "Exit", {
         fontFamily: "monospace",
         fontSize: 50,
         color: "#FFFFFF",
