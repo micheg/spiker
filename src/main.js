@@ -8,6 +8,7 @@ import BootScene from "./scenes/boot";
 import MenuScene from "./scenes/menu";
 import ScoreScene from "./scenes/scores";
 import TutScene from "./scenes/tutorial";
+import PuaseScene from "./scenes/pause";
 
 const game_area = {
   h: 1031,
@@ -16,7 +17,8 @@ const game_area = {
 
 let config = {
   type: Phaser.AUTO,
-  backgroundColor: "#ffffff",
+  //  backgroundColor: "#ffffff",
+  transparent: true,
   scale: {
     parent: "game",
     mode: Phaser.Scale.FIT,
@@ -24,7 +26,7 @@ let config = {
     height: 1031,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, MenuScene, GameScene, ScoreScene, TutScene],
+  scene: [BootScene, MenuScene, GameScene, ScoreScene, TutScene, PuaseScene],
   physics: {
     default: "arcade",
     arcade: {

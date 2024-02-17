@@ -89,15 +89,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.collider(player, spike_up, this.restart_up, null, this);
     this.physics.add.collider(player, spike_dwn, this.restart_down, null, this);
-
-    this.scoreTxt = this.add
-      .text(width / 2, 50, "Score: 0", {
-        fontFamily: "monospace",
-        fontSize: 32,
-        color: "#FFFFFF",
-      })
-      .setOrigin(0.5);
-
     const emitter = this.add.particles(0, 30, "texture", {
       frame: "red.png",
       speed: 100,
@@ -106,7 +97,44 @@ export default class GameScene extends Phaser.Scene {
     });
     emitter.startFollow(player);
     this.emitter = emitter;
+    this.create_ui();
   }
+
+  create_ui() {
+    const { width, height } = this.sys.game.canvas;
+    this.scoreTxt = this.add
+      .text(width / 2, 50, "Score: 0", {
+        fontFamily: "monospace",
+        fontSize: 32,
+        color: "#FFFFFF",
+      })
+      .setOrigin(0.5);
+
+    this.pause = this.add
+      .sprite(width - 50, 50, "texture", "pause.png")
+      .setScale(3)
+      .setInteractive()
+      .on("pointerdown", () => {
+        if (this.pause_click === true) return;
+        this.pause_click === true;
+        this.tweens.add({
+          targets: this.pause,
+          scale: 4,
+          duration: 100,
+          yoyo: true,
+          ease: "Cubic",
+          onComplete: () => {
+            this.pause_click === false;
+            console.log("complete, pause is " + this.scene.isPaused);
+            if (!this.scene.isPaused()) {
+              this.scene.launch("pause");
+              this.scene.pause();
+            }
+          },
+        });
+      });
+  }
+
   stop_game_objs() {
     this.emitter.stop();
     this.spike_dwn.body.velocity.y = 0;
@@ -114,14 +142,17 @@ export default class GameScene extends Phaser.Scene {
     this.player.body.velocity.y = 0;
     this.player.body.velocity.x = 0;
   }
+
   restart_up() {
     this.dead_from = "UP";
     this.restart();
   }
+
   restart_down() {
     this.dead_from = "DOWN";
     this.restart();
   }
+
   restart() {
     this.play("hit");
     const { width, height } = this.sys.game.canvas;
