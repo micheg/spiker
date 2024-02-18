@@ -5,7 +5,7 @@ export default class PuaseScene extends Phaser.Scene {
     super("pause");
   }
 
-  create_button(y, text, key, fn) {
+  createRectButton(y, text, key, fn) {
     const { width, height } = this.sys.game.canvas;
 
     const btn_rect = this.add
@@ -54,14 +54,19 @@ export default class PuaseScene extends Phaser.Scene {
       .rectangle(width / 2, height / 2, width, height, 0xffffff, 0.4)
       .setOrigin(0.5);
 
-    this.create_button(height / 2 - pad_value, "Resume", "resume", (self) => {
-      self.scene.stop();
-      self.scene.resume("game");
-    });
+    this.createRectButton(
+      height / 2 - pad_value,
+      "Resume",
+      "resume",
+      (self) => {
+        self.scene.stop();
+        self.scene.resume("game");
+      },
+    );
 
     const audio_label = this.game.config.info.audio ? "Audio  ON" : "Audio OFF";
 
-    this.audo_btn = this.create_button(
+    this.audo_btn = this.createRectButton(
       height / 2,
       audio_label,
       "audio",
@@ -80,7 +85,7 @@ export default class PuaseScene extends Phaser.Scene {
       },
     );
 
-    this.create_button(height / 2 + pad_value, "Exit", "exit", (self) => {
+    this.createRectButton(height / 2 + pad_value, "Exit", "exit", (self) => {
       self.scene.stop();
       self.scene.stop("game");
       self.scene.run("menu");
