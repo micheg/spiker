@@ -1,7 +1,5 @@
 import BaseUIScene from "./base_ui";
-
-let padTo8 = (number) =>
-  number <= 99999999 ? `0000000${number}`.slice(-8) : "OVERKILL";
+import { padTo8 } from "../helpers/utils";
 
 class ScoreScene extends BaseUIScene {
   constructor() {

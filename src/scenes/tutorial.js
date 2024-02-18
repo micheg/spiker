@@ -5,8 +5,9 @@ class TutScene extends BaseUIScene {
     super("tutorial");
   }
 
-  create() {
+  create(data) {
     const { width, height } = this.sys.game.canvas;
+    const next_scene = data && data.next ? data.next : "game";
     const center = {
       x: width / 2,
       y: height / 2,
@@ -55,7 +56,7 @@ class TutScene extends BaseUIScene {
         ease: "Cubic",
         onComplete: () => {
           this.scene.stop();
-          this.scene.run("game");
+          this.scene.run(next_scene);
         },
       });
     });

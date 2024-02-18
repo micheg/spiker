@@ -1,6 +1,6 @@
 import { can_play } from "../helpers/utils";
 
-const SPIKE_VELOCITY = 250;
+const SPIKE_VELOCITY = 200;
 const PLAER_VELOCITY = 300;
 
 import "phaser";
@@ -170,7 +170,7 @@ export default class GameScene extends Phaser.Scene {
       onComplete: () => {
         this.saveScore();
         this.scene.stop();
-        this.scene.run("menu");
+        this.scene.run("menu", { score: this.score });
       },
     });
   }
@@ -212,7 +212,7 @@ export default class GameScene extends Phaser.Scene {
       star,
       function () {
         this.JUMP += 5;
-        this.score += 5;
+        this.score += this.food_texture === "r_star.png" ? 10 : 5;
         this.food = false;
         this.play("pick");
         star.destroy();
@@ -233,7 +233,7 @@ export default class GameScene extends Phaser.Scene {
       function () {
         this.play("hit");
         this.food = false;
-        this.score -= 5;
+        this.score -= 2;
         star.destroy();
         this.updateScore();
       },
@@ -246,7 +246,7 @@ export default class GameScene extends Phaser.Scene {
       function () {
         this.play("hit");
         this.food = false;
-        this.score -= 5;
+        this.score -= 2;
         star.destroy();
         this.updateScore();
       },
