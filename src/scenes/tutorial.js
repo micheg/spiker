@@ -44,8 +44,8 @@ class TutScene extends BaseUIScene {
       ease: "linear",
     });
 
-    this.spikes = this.create_spike();
-    this.create_logo();
+    this.spikes = this.createSpikes();
+    this.createLogo();
 
     this.input.on("pointerdown", () => {
       this.tweens.add({

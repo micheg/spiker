@@ -22,13 +22,13 @@ export default class GameScene extends Phaser.Scene {
     if (can_play(this)) this[sound].play();
   }
 
-  create_audio() {
+  createAudio() {
     this.hit = this.sound.add("hit");
     this.pick = this.sound.add("pick");
     this.jump = this.sound.add("jump");
   }
 
-  create_player() {
+  createPlayer() {
     const { width, height } = this.sys.game.canvas;
     this.anims.create({
       key: "fly",
@@ -53,14 +53,14 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.create_audio();
+    this.createAudio();
     const { width, height } = this.sys.game.canvas;
 
     this.width = width;
     this.height = height;
     this.add.image(width / 2, height / 2, "texture", "sky.png");
 
-    const player = this.create_player();
+    const player = this.createPlayer();
     this.player = player;
 
     const spike_up = this.physics.add
@@ -87,8 +87,14 @@ export default class GameScene extends Phaser.Scene {
       this.play("jump");
     });
 
-    this.physics.add.collider(player, spike_up, this.restart_up, null, this);
-    this.physics.add.collider(player, spike_dwn, this.restart_down, null, this);
+    this.physics.add.collider(player, spike_up, this.restartFromUP, null, this);
+    this.physics.add.collider(
+      player,
+      spike_dwn,
+      this.restartFromDown,
+      null,
+      this,
+    );
     const emitter = this.add.particles(0, 30, "texture", {
       frame: "red.png",
       speed: 100,
@@ -97,10 +103,10 @@ export default class GameScene extends Phaser.Scene {
     });
     emitter.startFollow(player);
     this.emitter = emitter;
-    this.create_ui();
+    this.createUI();
   }
 
-  create_ui() {
+  createUI() {
     const { width, height } = this.sys.game.canvas;
     this.scoreTxt = this.add
       .text(width / 2, 50, "Score: 0", {
@@ -135,7 +141,7 @@ export default class GameScene extends Phaser.Scene {
       });
   }
 
-  stop_game_objs() {
+  stopGameObjs() {
     this.emitter.stop();
     this.spike_dwn.body.velocity.y = 0;
     this.spike_up.body.velocity.y = 0;
@@ -143,12 +149,12 @@ export default class GameScene extends Phaser.Scene {
     this.player.body.velocity.x = 0;
   }
 
-  restart_up() {
+  restartFromUP() {
     this.dead_from = "UP";
     this.restart();
   }
 
-  restart_down() {
+  restartFromDown() {
     this.dead_from = "DOWN";
     this.restart();
   }
@@ -157,7 +163,7 @@ export default class GameScene extends Phaser.Scene {
     this.play("hit");
     const { width, height } = this.sys.game.canvas;
     this.state = "END";
-    this.stop_game_objs();
+    this.stopGameObjs();
     const target_h = this.dead_from === "UP" ? -20 : height + 20;
     this.tweens.add({
       targets: this.player,
@@ -187,7 +193,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createFood() {
-    console.log("food " + this.food);
     if (this.food) return;
     this.food = true;
     const { width, height } = this.sys.game.canvas;

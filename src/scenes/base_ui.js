@@ -11,7 +11,7 @@ class BaseUIScene extends Scene {
   }
 
   // creating top and down spikes
-  create_spike() {
+  createSpikes() {
     const { width, height } = this.sys.game.canvas;
     const spike_up = this.add
       .image(width / 2, height - 50, "texture", "spike_wall.png")
@@ -28,7 +28,7 @@ class BaseUIScene extends Scene {
   }
 
   // creating href
-  create_btn(text, y, callback) {
+  createSpikeButton(text, y, callback) {
     const { width, height } = this.sys.game.canvas;
     this.center = {
       x: width / 2,
@@ -60,7 +60,7 @@ class BaseUIScene extends Scene {
   }
 
   // creating logo
-  create_logo() {
+  createLogo() {
     const { width, height } = this.sys.game.canvas;
     const center = {
       x: width / 2,

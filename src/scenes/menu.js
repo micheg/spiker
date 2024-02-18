@@ -6,14 +6,14 @@ class MenuScene extends BaseUIScene {
     super("menu");
   }
 
-  play_bg() {
+  playBGMusic() {
     if (can_play(this) && this.bg_sound.isPlaying) return;
     if (can_play(this) && !this.bg_sound.isPlaying) this.bg_sound.play();
     if (!can_play(this) && !this.bg_sound.isPlaying) return;
     if (!can_play(this) && this.bg_sound.isPlaying) this.bg_sound.stop();
   }
 
-  create_last_score(data) {
+  createLastScore(data) {
     if (data && data.score) {
       const { width, height } = this.sys.game.canvas;
       const center = {
@@ -34,7 +34,7 @@ class MenuScene extends BaseUIScene {
   create(data) {
     this.sound.removeByKey("back");
     this.bg_sound = this.sound.add("back", { volume: 0.1, loop: true });
-    this.play_bg();
+    this.playBGMusic();
 
     const { width, height } = this.sys.game.canvas;
     this.center = {
@@ -46,7 +46,7 @@ class MenuScene extends BaseUIScene {
       .rectangle(center.x, center.y, width, height, 0x454c60)
       .setOrigin(0.5);
 
-    this.create_btn("Start Game!", center.y - 250, () => {
+    this.createSpikeButton("Start Game!", center.y - 250, () => {
       this.scene.stop();
       if (sessionStorage.getItem("tutorial") === null) {
         this.scene.run("tutorial", { next: "game" });
@@ -56,28 +56,28 @@ class MenuScene extends BaseUIScene {
       }
     });
 
-    this.create_btn("Tutorial!", center.y + 200, () => {
+    this.createSpikeButton("Tutorial!", center.y + 200, () => {
       this.scene.stop();
       this.scene.run("tutorial", { next: "menu" });
     });
 
-    this.create_btn("Scores!", center.y - 100, () => {
+    this.createSpikeButton("Scores!", center.y - 100, () => {
       this.scene.stop();
       this.scene.run("score");
     });
     const audio_label = this.game.config.info.audio ? "Audio  ON" : "Audio OFF";
 
-    this.audio_btn = this.create_btn(audio_label, center.y + 50, () => {
+    this.audio_btn = this.createSpikeButton(audio_label, center.y + 50, () => {
       this.game.config.info.audio = !this.game.config.info.audio;
       const audio_label = this.game.config.info.audio
         ? "Audio  ON"
         : "Audio OFF";
       this.audio_btn.text = this._pad(audio_label);
-      this.play_bg();
+      this.playBGMusic();
     });
-    this.create_last_score(data);
-    this.spikes = this.create_spike();
-    this.create_logo();
+    this.createLastScore(data);
+    this.spikes = this.createSpikes();
+    this.createLogo();
   }
 }
 

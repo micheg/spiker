@@ -18,7 +18,7 @@ class ScoreScene extends BaseUIScene {
       .rectangle(center.x, center.y, width, height, 0x454c60)
       .setOrigin(0.5);
 
-    this.create_btn("back", height - 80, () => {
+    this.createSpikeButton("back", height - 80, () => {
       this.scene.stop();
       this.scene.run("menu");
     });
@@ -36,8 +36,8 @@ class ScoreScene extends BaseUIScene {
         .setOrigin(0.5);
     }
 
-    this.spikes = this.create_spike();
-    this.create_logo();
+    this.spikes = this.createSpikes();
+    this.createLogo();
   }
 }
 
