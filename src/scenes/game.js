@@ -187,6 +187,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createFood() {
+    console.log("food " + this.food);
     if (this.food) return;
     this.food = true;
     const { width, height } = this.sys.game.canvas;
@@ -211,18 +212,31 @@ export default class GameScene extends Phaser.Scene {
       this.player,
       star,
       function () {
-        this.JUMP += 5;
-        this.score += this.food_texture === "r_star.png" ? 10 : 5;
-        this.food = false;
-        this.play("pick");
-        star.destroy();
-        this.updateScore();
-        const _jump = this.food_texture === "r_star.png" ? 100 : 50;
+        if (this.state === "END") return;
+        star.body.enable = false;
+        this.tweens.add({
+          targets: star,
+          scale: 1.5,
+          duration: 100,
+          y: y - 50,
+          yoyo: true,
+          ease: "Cubic",
+          onComplete: () => {
+            this.JUMP += 5;
+            this.score += this.food_texture === "r_star.png" ? 10 : 5;
+            this.food = false;
+            this.play("pick");
 
-        const max_up = Math.min(this.spike_up.y + _jump, height - 50);
-        const max_dw = Math.max(this.spike_dwn.y - _jump, 50);
-        this.spike_up.setPosition(width / 2, max_up);
-        this.spike_dwn.setPosition(width / 2, max_dw);
+            star.destroy();
+            this.updateScore();
+            const _jump = this.food_texture === "r_star.png" ? 100 : 50;
+
+            const max_up = Math.min(this.spike_up.y + _jump, height - 50);
+            const max_dw = Math.max(this.spike_dwn.y - _jump, 50);
+            this.spike_up.setPosition(width / 2, max_up);
+            this.spike_dwn.setPosition(width / 2, max_dw);
+          },
+        });
       },
       null,
       this,
