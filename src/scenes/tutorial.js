@@ -17,9 +17,9 @@ class TutScene extends BaseUIScene {
       .setOrigin(0.5);
     const text = `👆 to jump, \n\ncollect ⭐ to \n\nslowdown 🔺🔺🔺🔺, \n\ntry to survie.`;
     this.add
-      .text(center.x, center.y - 100, text, {
+      .text(center.x, center.y - 80, text, {
         fontFamily: "monospace",
-        fontSize: 50,
+        fontSize: 40,
         color: "#FFFFFF",
         align: "center",
       })

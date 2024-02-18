@@ -22,7 +22,7 @@ class MenuScene extends BaseUIScene {
       };
       const text = `last score ${padTo8(data.score)}`;
       this.add
-        .text(center.x, center.y + 400, text, {
+        .text(center.x, center.y + 300, text, {
           fontFamily: "monospace",
           fontSize: 30,
           color: "#FFFFFF",
