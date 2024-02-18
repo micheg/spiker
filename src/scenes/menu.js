@@ -33,7 +33,7 @@ class MenuScene extends BaseUIScene {
 
   create(data) {
     this.sound.removeByKey("back");
-    this.bg_sound = this.sound.add("back", { volume: 0.3, loop: true });
+    this.bg_sound = this.sound.add("back", { volume: 0.1, loop: true });
     this.play_bg();
 
     const { width, height } = this.sys.game.canvas;
@@ -75,10 +75,9 @@ class MenuScene extends BaseUIScene {
       this.audio_btn.text = this._pad(audio_label);
       this.play_bg();
     });
-
+    this.create_last_score(data);
     this.spikes = this.create_spike();
     this.create_logo();
-    this.create_last_score(data);
   }
 }
 
