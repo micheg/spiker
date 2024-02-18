@@ -213,11 +213,12 @@ export default class GameScene extends Phaser.Scene {
       star,
       function () {
         if (this.state === "END") return;
+        this.play("pick");
         star.body.enable = false;
         this.tweens.add({
           targets: star,
           scale: 1.5,
-          duration: 100,
+          duration: 50,
           y: y - 50,
           yoyo: true,
           ease: "Cubic",
@@ -225,7 +226,6 @@ export default class GameScene extends Phaser.Scene {
             this.JUMP += 5;
             this.score += this.food_texture === "r_star.png" ? 10 : 5;
             this.food = false;
-            this.play("pick");
 
             star.destroy();
             this.updateScore();
