@@ -47,6 +47,9 @@ class BootScene extends Scene {
   _next() {
     this.scene.stop();
     this.scene.start("menu");
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 100);
   }
 }
 

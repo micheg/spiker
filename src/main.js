@@ -16,6 +16,9 @@ const game_area = {
   w: 580,
 };
 
+let game = null;
+let init = false;
+
 let config = {
   type: Phaser.AUTO,
   //  backgroundColor: "#ffffff",
@@ -53,14 +56,35 @@ window.addEventListener("load", () => {
     const ratio = window.innerHeight / window.innerWidth;
     const width = 580;
     const height = Math.min(width * ratio, 1392);
-
-    console.log(`${ratio} - ${width} - ${height}`);
     config.scale.width = width;
     config.scale.height = height;
+    init = true;
   }
-  let game = new Phaser.Game(config);
+  game = new Phaser.Game(config);
   game.config.info = {
     game_area: game_area,
     audio: false,
   };
+});
+
+window.addEventListener("resize", () => {
+  if (game === null) exit();
+  if (window.innerWidth < window.innerHeight) {
+    if (init == false) window.location.reload();
+    if (game.isPaused) {
+      game.resume();
+      const g_elem = document.getElementById("game");
+      g_elem.style.display = "block";
+      const r_elem = document.getElementById("rotate");
+      r_elem.style.display = "none";
+    }
+  } else {
+    if (game != null) {
+      game.pause();
+      const g_elem = document.getElementById("game");
+      g_elem.style.display = "none";
+      const r_elem = document.getElementById("rotate");
+      r_elem.style.display = "flex";
+    }
+  }
 });
