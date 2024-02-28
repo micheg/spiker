@@ -10,6 +10,7 @@ import ScoreScene from "./scenes/scores";
 import TutScene from "./scenes/tutorial";
 import PuaseScene from "./scenes/pause";
 import { Capacitor } from "@capacitor/core";
+import { isMobile } from "./helpers/utils";
 
 const game_area = {
   h: 1031,
@@ -68,6 +69,7 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("resize", () => {
+  if (!isMobile()) return;
   if (game === null) exit();
   if (window.innerWidth < window.innerHeight) {
     if (init == false) window.location.reload();
